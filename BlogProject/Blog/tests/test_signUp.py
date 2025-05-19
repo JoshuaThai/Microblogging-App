@@ -25,7 +25,7 @@ class TestSignUpUnsucessful(TestCase):
             'first_name': '',
             'last_name': 'Doe',
             'username': 'testuser',
-            'email': 'email@gmail.com',
+            'email': 'email@email.com',
             'password': 'pass',
             'birthDate': '1970-01-01'
         }, follow=True)
@@ -37,7 +37,7 @@ class TestSignUpUnsucessful(TestCase):
             'first_name': 'John',
             'last_name': '',
             'username': 'testuser',
-            'email': 'email@gmail.com',
+            'email': 'email@email.com',
             'password': 'pass',
             'birthDate': '1970-01-01'
         }, follow=True)
@@ -55,6 +55,7 @@ class TestSignUpUnsucessful(TestCase):
         }, follow=True)
         self.assertEqual(response.status_code, 200) # site reloaded the page atleast.
         self.assertContains(response, 'Please enter your email.')
+    # invalid email address
     def test_signup_invalidEmail(self):
         client = Client()
         response = client.post('/signup/', {
@@ -68,6 +69,22 @@ class TestSignUpUnsucessful(TestCase):
         self.assertEqual(response.status_code, 200) # site reloaded the page atleast.
         self.assertContains(response, 'Please enter an valid email address.')
 
+    # enter an email address that is already used
+    def test_signup_uniqueEmail(self):
+        client = Client()
+        response = client.post('/signup/', {
+            'first_name': 'john',
+            'last_name': 'Doe',
+            'username': 'testuser',
+            'email': 'email@gmail.com',
+            'password': 'pass',
+            'birthDate': '1970-01-01'
+        }, follow=True)
+        self.assertEqual(response.status_code, 200) # site reloaded the page atleast.
+        self.assertContains(response,
+                            'This email is already associated with another account. '
+                            'Please choose a different email address.')
+
     # username tests
     # no username at all.
     def test_signup_noUsername(self):
@@ -76,7 +93,7 @@ class TestSignUpUnsucessful(TestCase):
             'first_name': 'john',
             'last_name': 'Doe',
             'username': '',
-            'email': 'email@gmail.com',
+            'email': 'email@email.com',
             'password': 'pass',
             'birthDate': '1970-01-01'
         }, follow=True)
@@ -89,7 +106,7 @@ class TestSignUpUnsucessful(TestCase):
             'first_name': 'john',
             'last_name': 'Doe',
             'username': 's',
-            'email': 'email@gmail.com',
+            'email': 'email@email.com',
             'password': 'pass',
             'birthDate': '1970-01-01'
         }, follow=True)
@@ -104,7 +121,7 @@ class TestSignUpUnsucessful(TestCase):
             'first_name': 'john',
             'last_name': 'Doe',
             'username': 'testuser',
-            'email': 'email@gmail.com',
+            'email': 'email@email.com',
             'password': '',
             'birthDate': '1970-01-01'
         }, follow=True)
@@ -118,7 +135,7 @@ class TestSignUpUnsucessful(TestCase):
             'first_name': 'john',
             'last_name': 'Doe',
             'username': 'testuser',
-            'email': 'email@gmail.com',
+            'email': 'email@email.com',
             'password': 'e',
             'birthDate': '1970-01-01'
         }, follow=True)
@@ -132,7 +149,7 @@ class TestSignUpUnsucessful(TestCase):
             'first_name': 'john',
             'last_name': 'Doe',
             'username': 'testuser',
-            'email': 'email@gmail.com',
+            'email': 'email@email.com',
             'password': '1234567890123456789012345',
             'birthDate': '1970-01-01'
         }, follow=True)
@@ -146,20 +163,17 @@ class TestSignUpUnsucessful(TestCase):
             'first_name': 'john',
             'last_name': 'Doe',
             'username': 'testuser',
-            'email': 'email@gmail.com',
-            'password': 'pass',
-            # 'birthDate': '1970-01-01'
+            'email': 'email@email.com',
+            'password': 'password123',
+            'birthDate': ''
         }, follow=True)
         self.assertEqual(response.status_code, 200)  # site reloaded the page atleast.
         self.assertContains(response, 'Please enter your date of birth.')
 
-
-
-
 class TestSignUpSuccess(TestCase):
     def setUp(self):
         self.client = Client()
-        user = User.objects.create(
+        TestUser = User.objects.create(
             first_name = 'John',
             last_name = 'Doe',
             username='testuser',
@@ -177,15 +191,16 @@ class TestSignUpSuccess(TestCase):
             'first_name': 'John',
             'last_name': 'Doe',
             'username': 'testuser',
-            'email': 'email@gmail.com',
+            'email': 'email@email.com',
             'password': 'pass',
             'birthDate': '1970-01-01'
         }, follow=True)
         # check if the form input processed.
-        self.assertEqual(response.context['username'], 'testuser')
-        self.assertEqual(response.context['email'], 'email@gmail.com')
-        self.assertEqual(response.context['password'], 'pass')
-        self.assertEqual(response.context['birthDate'], '1970-01-01')
-        self.assertTrue(response.request.user.is_authenticated())
+        self.assertEqual(response.status_code, 200)  # site reloaded the page atleast.
+
+        # if successful when signing up, a user model should have been created.
+        # Also 'user' should have been passed through the render request.
+        self.assertTrue(response.context['user'], User.objects.get(username='testuser'))
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
 
 
