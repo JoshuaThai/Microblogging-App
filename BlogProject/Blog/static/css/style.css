@@ -1,6 +1,5 @@
 /* This will contain CSS styling that are universal to all pages.*/
-
-.bg{
+.content{
   text-align: center;
 }
 
@@ -21,7 +20,7 @@ button{
   /*background-color: #2b2b2b;*/
   color: white;
   font-size: 32px;
-  border-color: transparent;
+  border: 2px solid black;
   box-shadow: 1px 1px 3px #000000;
 }
 
@@ -37,16 +36,31 @@ button:hover{
   width: 1px;
 }
 .signIn{
-  text-align: right;
-  margin-top: 2px;
-  margin-right: 10px;
+    display: flex;
+    gap: 10px;
+  /*text-align: right;*/
+  background-color: #313168;
+  padding: 10px 8px;
+  /*margin-top: 2px;*/
+  /*margin-left: 1250px;*/
+  /*margin-right: 10px;*/
+  border: 2px solid black;
+  border-radius: 10px;
 }
 .login{
+  margin-top: 2px;
+  margin-right: 10px;
   display: inline-block;
-  background-color: darkgreen;
 }
 
 .signUp{
+  margin-top: 2px;
+  margin-right: 10px;
   display: inline-block;
   background-color: forestgreen;
+}
+
+.logo{
+  display: inline-block;
+  text-align: left;
 }
