@@ -1,21 +1,22 @@
 import datetime
 
 from django import test
-
+from django.contrib.auth import get_user_model
 from ..models import User
 
+User = get_user_model()
 # unit test for User Models
 class TestModels(test.TestCase):
     def setUp(self):
-        user = User.objects.create(
+        user = User(
             first_name = 'John',
             last_name = 'Doe',
             username='testuser',
             email='email@gmail.com',
-            password='pass',
             birthDate= datetime.date(1970, 1, 1),
             role = 'user'
         )
+        user.set_password('pass')
         user.save()
     def test_User_exist(self):
         self.assertTrue(User.objects.filter(username='testuser').exists())

@@ -12,10 +12,11 @@ class TestSignUpUnsucessful(TestCase):
             last_name='Doe',
             username='testuser',
             email='email@gmail.com',
-            password='pass',
             birthDate=datetime.date(1970, 1, 1),
             role='user'
         )
+        user.set_password('pass')
+        user.save()
     def test_User_exists(self):
         self.assertTrue(User.objects.filter(username='testuser').exists())
 
@@ -178,10 +179,11 @@ class TestSignUpSuccess(TestCase):
             last_name = 'Doe',
             username='testuser',
             email='email@gmail.com',
-            password='pass',
             birthDate= datetime.date(1970, 1, 1),
             role = 'user'
         )
+        TestUser.set_password('pass')
+        TestUser.save()
     def test_User_exists(self):
         self.assertTrue(User.objects.filter(username='testuser').exists())
 
@@ -190,17 +192,18 @@ class TestSignUpSuccess(TestCase):
         response = client.post('/signup/', {
             'first_name': 'John',
             'last_name': 'Doe',
-            'username': 'testuser',
+            'username': 'testuser1',
             'email': 'email@email.com',
-            'password': 'pass',
+            'password': 'password123',
             'birthDate': '1970-01-01'
-        }, follow=True)
+        })
         # check if the form input processed.
-        self.assertEqual(response.status_code, 200)  # site reloaded the page atleast.
+        # Will not show if follow=true in response above because it will follow the 302 redirect before it
+        # gets to this line.
+        self.assertEqual(response.status_code, 302)  # redirected the page atleast.
 
         # if successful when signing up, a user model should have been created.
         # Also 'user' should have been passed through the render request.
-        self.assertTrue(response.context['user'], User.objects.get(username='testuser'))
         self.assertTrue(response.wsgi_request.user.is_authenticated)
 
 
