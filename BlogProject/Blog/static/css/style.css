@@ -1,4 +1,10 @@
 /* This will contain CSS styling that are universal to all pages.*/
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
 .content{
   text-align: center;
 }
