@@ -70,7 +70,9 @@
                 <button onclick = "location.href='{% url 'home' %}'">Home</button>
     {#            <div class = "nav_block"></div>#}
                     <button onclick = "location.href='{% url 'home' %}'">Messages</button>
-                <button onclick = "location.href='{% url 'home' %}'">Your Profile</button>
+                    {% if id %}
+                        <button onclick = "location.href='{% url 'profile' id %}'">Your Profile</button>
+                    {% endif %}
             </div>
             </div>
     </div>

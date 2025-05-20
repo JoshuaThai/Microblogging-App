@@ -1,4 +1,6 @@
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 
@@ -9,8 +11,10 @@ from .models import User
 class HomeView(View):
     def get(self, request):
         username = request.session.get('username')
+        id = request.session.get('id')
         print(username)
-        return render(request, 'home.html', {'username': username})
+        print('id', id)
+        return render(request, 'home.html', {'username': username, 'id': id})
     def post(self, request):
         # need to implement to handle log out button
         request.session.flush() # clear out sessions essentially logging out user.
@@ -37,6 +41,7 @@ class LoginView(View):
             request.session['username'] = user1.username
             request.session['first_name'] = user1.first_name
             request.session['last_name'] = user1.last_name
+            request.session['id'] = user1.id
             request.session.save()
         else:
             user1 = User.objects.filter(username=determineValue).first()
@@ -51,6 +56,7 @@ class LoginView(View):
             request.session['username'] = user1.username
             request.session['first_name'] = user1.first_name
             request.session['last_name'] = user1.last_name
+            request.session['id'] = user1.id
             request.session.save()
 
         return redirect('home')
@@ -114,6 +120,16 @@ class SignUpView(View):
         request.session['username'] = user.username
         request.session['first_name'] = user.first_name
         request.session['last_name'] = user.last_name
+        request.session['id'] = user.id
         request.session.save()
 
         return redirect('home')
+
+class ProfileView(LoginRequiredMixin, View):
+    # @login_required
+    def get(self, request, id):
+        print('id', id)
+        user = User.objects.filter(id=id).first()
+        return render(request, 'profile.html', {'profile_user': user})
+    def post(self, request):
+        pass

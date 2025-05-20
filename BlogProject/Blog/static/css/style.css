@@ -107,3 +107,10 @@ label{
   color:white;
   font-family: "sans-serif";
 }
+
+.userPosts{
+  background-color: rgba(92,146,214,0.1);
+  border: 2px solid black;
+  font-size: 20px;
+  color: white
+}
