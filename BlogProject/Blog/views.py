@@ -12,7 +12,9 @@ class HomeView(View):
         print(username)
         return render(request, 'home.html', {'username': username})
     def post(self, request):
-        pass # need to implement to handle log out button
+        # need to implement to handle log out button
+        request.session.flush() # clear out sessions essentially logging out user.
+        return render(request, 'home.html')
 
 class LoginView(View):
     def get(self, request):

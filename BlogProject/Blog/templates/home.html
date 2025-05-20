@@ -58,6 +58,7 @@
                 {% else %}
                 <div class = "signIn">
                     <form method="post">
+                        {% csrf_token %}
                         <input type="hidden" id="action" name="action" value="logout">
                     <button class = "signUp" style="background-color: red" onclick = "location.href='{% url 'login' %}'">Log Out</button>
                         </form>
