@@ -11,6 +11,8 @@ class HomeView(View):
         username = request.session.get('username')
         print(username)
         return render(request, 'home.html', {'username': username})
+    def post(self, request):
+        pass # need to implement to handle log out button
 
 class LoginView(View):
     def get(self, request):
