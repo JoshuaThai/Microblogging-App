@@ -4,10 +4,10 @@ from django.test import TestCase, Client
 
 from ..models import User
 
-class TestSignUpUnsucessful(TestCase):
+class SignUpUnsuccessfulTests(TestCase):
     def setUp(self):
         self.client = Client()
-        user = User.objects.create(
+        user = User(
             first_name='John',
             last_name='Doe',
             username='testuser',
@@ -171,7 +171,7 @@ class TestSignUpUnsucessful(TestCase):
         self.assertEqual(response.status_code, 200)  # site reloaded the page atleast.
         self.assertContains(response, 'Please enter your date of birth.')
 
-class TestSignUpSuccess(TestCase):
+class SignUpSuccessTests(TestCase):
     def setUp(self):
         self.client = Client()
         TestUser = User.objects.create(

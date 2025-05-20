@@ -23,13 +23,28 @@
             background-size: cover;
         }
 
+        .logo{
+            display: inline-block;
+        }
+        .signIn{
+            display: inline-block;
+            margin-top: -100px;
+        }
         </style>
 </head>
 <body>
     <div class="bg">
+        <div class = "header">
+            <div class = "logo">
+                <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="150" height="150">
+            </div>
+             <div class = "signIn">
+                 <button class = "signUp" onclick = "location.href='{% url 'home' %}'">Back to Home</button>
+             </div>
+         </div>
         <div class = "box">
-            <h1><u>SIGN UP</u></h1>
-            <p>Create an account to see posts and make new friends!</p>
+            <h1 style="color: white"><u>SIGN UP</u></h1>
+            <p style="color: white; font-size: 20px">Create an account to see posts and make new friends!</p>
             <p style = "color: red">{{ message }}</p>
              <form method = "post">
                  {% csrf_token %}
@@ -46,7 +61,7 @@
                         placeholder="Must be 8 to 24 characters long."><br><br>
                  <label for="birthDate"><b>Date of Birth:</b></label><br>
                  <input type = "date" id = "birthDate" name="birthDate"><br><br>
-                 <input type ="submit" value = "Sign Up">
+                 <input class = "submit" type ="submit" value = "Sign Up">
             </form>
         </div>
 
