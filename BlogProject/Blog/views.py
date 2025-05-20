@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.views import View
 
@@ -19,6 +19,41 @@ class HomeView(View):
 class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
+    def post(self, request):
+        determineValue = request.POST.get('identifier')
+        password = request.POST.get('password')
+        if not determineValue or not password:
+            return render(request, 'login.html',
+                          {'message': 'One or more fields was empty. Please try again.'})
+        if User.objects.filter(email=determineValue).first():
+            email = determineValue
+            user1 = User.objects.filter(email=email).first()
+            user = authenticate(request, username=user1.username, password=password)
+            if not user:
+                return render(request, 'login.html',
+                              {'message': 'Invalid password. Please try again.'})
+            login(request, user)
+
+            request.session['username'] = user1.username
+            request.session['first_name'] = user1.first_name
+            request.session['last_name'] = user1.last_name
+            request.session.save()
+        else:
+            user1 = User.objects.filter(username=determineValue).first()
+            if not user1:
+                return render(request, 'login.html',
+                              {'message': 'Invalid username or email. Please try again.'})
+            user = authenticate(request, username=determineValue, password=password)
+            if not user:
+                return render(request, 'login.html',
+                              {'message': 'Invalid password. Please try again.'})
+            login(request, user)
+            request.session['username'] = user1.username
+            request.session['first_name'] = user1.first_name
+            request.session['last_name'] = user1.last_name
+            request.session.save()
+
+        return redirect('home')
 
 class SignUpView(View):
     def get(self, request):
@@ -78,6 +113,7 @@ class SignUpView(View):
         # declare sessions
         request.session['username'] = user.username
         request.session['first_name'] = user.first_name
+        request.session['last_name'] = user.last_name
         request.session.save()
 
         return redirect('home')

@@ -33,25 +33,40 @@ class LoginUnsuccessfulTests(TestCase):
 
     def test_login_wrong_username(self):
         client = Client()
-        response = client.post('/login/', {'user/email': 'testuse', 'password': 'password'})
+        response = client.post('/login/', {'identifier': 'testuse', 'password': 'password'})
 
         self.assertTrue(response.status_code == 200) # page should be rendering again if incorrect info.
         self.assertFalse(response.status_code == 302)  # should not be redirecting anywhere
-        self.assertContains(response, 'Invalid username. Please try again.')
+        self.assertContains(response, 'Invalid username or email. Please try again.')
+    def test_login_empty_username(self):
+        client = Client()
+        response = client.post('/login/', {'identifier': '', 'password': 'password'})
+        self.assertTrue(response.status_code == 200)  # page should be rendering again if incorrect info.
+        self.assertFalse(response.status_code == 302)  # should not be redirecting anywhere
+        self.assertContains(response, 'One or more fields was empty. Please try again.')
+
     def test_login_wrong_email(self):
         client = Client()
-        response = client.post('/login/', {'user/email': 'josh@', 'password': 'password'})
+        response = client.post('/login/', {'identifier': 'josh@email.com', 'password': 'password'})
 
         self.assertTrue(response.status_code == 200) # page should be rendering again if incorrect info.
         self.assertFalse(response.status_code == 302) # should not be redirecting anywhere
-        self.assertContains(response, 'Invalid email address. Please try again.')
+        self.assertContains(response, 'Invalid username or email. Please try again.')
     def test_login_wrong_password(self):
         client = Client()
-        response = client.post('/login/', {'user/email': 'testuser', 'password': 'pass'})
+        response = client.post('/login/', {'identifier': 'testuser', 'password': 'pass'})
 
         self.assertTrue(response.status_code == 200) # page should be rendering again if incorrect info.
         self.assertFalse(response.status_code == 302) # should not be redirecting anywhere
         self.assertContains(response, 'Invalid password. Please try again.')
+
+    def test_login_empty_password(self):
+        client = Client()
+        response = client.post('/login/', {'identifier': '', 'password': ''})
+
+        self.assertTrue(response.status_code == 200)  # page should be rendering again if incorrect info.
+        self.assertFalse(response.status_code == 302)  # should not be redirecting anywhere
+        self.assertContains(response, 'One or more fields was empty. Please try again.')
 
 class LoginSuccessfulTests(TestCase):
     def setUp(self):
@@ -70,15 +85,16 @@ class LoginSuccessfulTests(TestCase):
         self.assertTrue(User.objects.filter(username='testuser').exists())
     def test_login_correct_username(self):
         client = Client()
-        response = client.post('/login/', {'user/email': 'testuser', 'password': 'password'})
+        response = client.post('/login/', {'identifier': 'testuser', 'password': 'password'})
 
         self.assertFalse(response.status_code == 200)
         self.assertTrue(response.status_code == 302) # should redirect now!
-        self.assertContains(response, 'Welcome, testuser!')
     def test_login_correct_email(self):
         client = Client()
-        response = client.post('/login/', {'user/email': 'email@gmail.com', 'password': 'password'})
+        response = client.post('/login/', {'identifier': 'email@gmail.com', 'password': 'password'},
+                               follow=True)
 
-        self.assertFalse(response.status_code == 200)
-        self.assertTrue(response.status_code == 302) # should redirect now!
+        # when checking responses, always use contains assert!
+        self.assertNotContains(response, 'One or more fields was empty. Please try again.')
         self.assertContains(response, 'Welcome, testuser!')
+        # if I want to do this line, I need follow=true
