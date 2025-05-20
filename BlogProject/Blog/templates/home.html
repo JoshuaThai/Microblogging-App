@@ -45,12 +45,16 @@
             <div class = "logo">
                 <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="150" height="150">
             </div>
+            {% if not username %}
             <div class = "signIn">
                     <button class = "signUp" onclick = "location.href='{% url 'signUp' %}'">Sign Up</button>
                     <button class = "login" onclick = "location.href='{% url 'login' %}'">Login</button>
                 </div>
+            {% endif %}
         </div>
-
+        {% if username %}
+                <h2 style="text-align: center; background-color: white">Welcome, {{username}}!</h2>
+            {% endif %}
             <div class = "content">
                 <div class = "nav">
                 <button onclick = "location.href='{% url 'home' %}'">Home</button>
