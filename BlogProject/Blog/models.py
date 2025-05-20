@@ -9,7 +9,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=320, unique=True)
     username = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
-    birthDate = models.DateField(auto_now= False, auto_now_add=False)
+    birthDate = models.DateField(auto_now= False, auto_now_add=False, null=True, blank=True)
     accountCreated = models.DateTimeField(auto_now_add=True) # set the time to now when object is first created.
 
     ROLE_CHOICES = (

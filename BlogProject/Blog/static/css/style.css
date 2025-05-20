@@ -62,3 +62,27 @@ button:hover{
   text-align: left;
   /*border: 2px solid #313168;*/
 }
+
+.box{
+  background: rgba(255, 255, 255, 0.8);
+  width: 400px;
+  height: 650px;
+  border-radius: 25px;
+  align-content: center;
+  text-align: center;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  /*-webkit-transform: translate(-50%, -50%);*/
+  transform: translate(-50%, -50%);
+}
+
+label{
+  font-size: 32px;
+}
+
+input{
+  scale: 1.25;
+  border-color: transparent;
+  border-radius: 10px;
+}
