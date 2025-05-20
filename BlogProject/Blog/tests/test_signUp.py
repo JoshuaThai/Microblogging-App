@@ -7,7 +7,7 @@ from ..models import User
 class TestSignUpUnsucessful(TestCase):
     def setUp(self):
         self.client = Client()
-        user = User.objects.create(
+        user = User(
             first_name='John',
             last_name='Doe',
             username='testuser',
