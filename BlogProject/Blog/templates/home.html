@@ -37,6 +37,11 @@
             margin-top: -100px;
         }
 
+        #welcome{
+            background-color: #3c418e; padding-top: 20px; padding-bottom: 20px; width: 25%; margin: auto;
+            color: white; font-size: 32px; border: 2px solid black; border-radius: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -50,10 +55,20 @@
                     <button class = "signUp" onclick = "location.href='{% url 'signUp' %}'">Sign Up</button>
                     <button class = "login" onclick = "location.href='{% url 'login' %}'">Login</button>
                 </div>
+                {% else %}
+                <div class = "signIn">
+                    <form method="post">
+                        <input type="hidden" id="action" name="action" value="logout">
+                    <button class = "signUp" style="background-color: red" onclick = "location.href='{% url 'login' %}'">Log Out</button>
+                        </form>
+                </div>
             {% endif %}
         </div>
         {% if username %}
-                <h2 style="text-align: center; background-color: white">Welcome, {{username}}!</h2>
+                <div style="text-align: center;">
+                    <h2 id="welcome">
+                        Welcome, {{username}}!</h2>
+                </div><br>
             {% endif %}
             <div class = "content">
                 <div class = "nav">
