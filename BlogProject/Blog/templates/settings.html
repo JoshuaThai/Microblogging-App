@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ profile_user.username }}'s Settings</title>
+    <link href= "{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link rel = icon type="image/x-icon" href = {% static 'images/favicon.ico' %}>
+    <style>
+        h1,h2{
+            color:white;
+            font-family: sans-serif;
+        }
+
+        .bg {
+            {#height: 100%;#}
+            {#width: 100%;#}
+            background-image: url("{% static 'images/shooting-star.png' %}");
+            background-position: center;
+            background-repeat: repeat-y;
+            background-size: auto;
+        }
+
+        .logo{
+            display: inline-block;
+        }
+
+        .signIn{
+            display: inline-block;
+            margin-top: -100px;
+        }
+
+        #box{
+            display: flex;
+            flex-direction: column;
+            {#position: fixed;#}
+            background-color: rgba(63, 63, 140, 0.8);
+            {#align-content: center;#}
+            text-align: center;
+            justify-content: center;
+            padding-top: 1%;
+            margin-left: 10%;
+            margin-right: 10%;
+            margin-bottom: auto;
+            border: 2px solid white;
+            border-radius: 10px;
+
+        }
+        #info{
+            text-align: center;
+        }
+        hr{
+            width: 50%
+        }
+        </style>
+</head>
+<body>
+{# Each account information will have its own submit button. Make sure to adjust view.py for this exact reason.#}
+ <div class="bg">
+        <div class = "header">
+            <div class = "logo">
+                <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="150" height="150">
+            </div>
+             <div class = "signIn">
+                 <button class = "signUp" onclick = "location.href='{% url 'profile' profile_user.id%}'">Back to Profile</button>
+             </div>
+         </div>
+        <div id ="box">
+                <h1 style="font-size: 48px"><u>Settings:</u></h1>
+                <p style="color: red; font-size: 32px; font-weight: bold">{{ message }}</p>
+    {#            <label for="first_name">First Name</label><br>#}
+    {#                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">#}
+                <div id = "info">
+                    <hr>
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
+                        {% csrf_token %}
+                    <label for="first_name">First Name</label><br><br>
+                        <input type="hidden" name="action" value="changeFirst">
+                    <input type="text" id="first_name" name="first_name" value="{{ profile_user.first_name }}">
+                        <br><br>
+                    <input class="submit" type="submit" value="Submit New First Name">
+                        </form>
+                    <hr>
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
+                        {% csrf_token %}
+                    <label for="last_name">Last Name</label><br><br>
+                        <input type="hidden" name="action" value="changeLast">
+                    <input type="text" id="last_name" name="last_name" value="{{ profile_user.last_name }}"><br><br>
+                    <input class="submit" type="submit" value="Submit New Last Name">
+                    </form>
+                    <hr>
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
+                        {% csrf_token %}
+                     <label for="email">Email</label><br><br>
+                        <input type="hidden" name="action" value="changeEmail">
+                    <input type="email" id="email" name="email" value="{{ profile_user.email }}"><br><br>
+                    <input class="submit" type="submit" value="Submit New Email Address">
+                    </form>
+                    <hr>
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
+                        {% csrf_token %}
+                     <label for="username">Username</label><br><br>
+                    <input type="hidden" name="action" value="changeUsername">
+                    <input type="text" id="username" name="username" value="{{ profile_user.username }}"><br><br>
+                    <input class="submit" type="submit" value="Submit New Username">
+                    </form>
+                    <hr>
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
+                        {% csrf_token %}
+                     <label for="birthDate">Date of Birth</label><br><br>
+                    <input type="hidden" name="action" value="changeDate">
+                    <input type="date" id="birthDate" name="birthDate" value="{{ profile_user.birthDate|date:'Y-m-d' }}"><br><br>
+                    <input class="submit" type="submit" value="Submit New Date">
+                    </form>
+                    <hr>
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
+                        {% csrf_token %}
+                     <label for="password">Password</label><br><br>
+                    <label for="oldPass">Enter Old Password</label><br><br>
+                    <input type="password" id="oldPass" name="oldPass"><br><br>
+                    <label for="newPass">Enter New Password</label><br><br>
+                    <input type="password" id="newPass" name="newPass"><br><br>
+                        <input type="hidden" name="action" value="changePass">
+                    <input class="submit" type="submit" value="Submit New Password">
+                    </form>
+                    <hr>
+            </div>
+        </div>
+ </div>
+</body>
+</html>

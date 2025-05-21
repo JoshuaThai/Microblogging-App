@@ -7,11 +7,6 @@
     <link href= "{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
     <link rel = icon type="image/x-icon" href = {% static 'images/favicon.ico' %}>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
         h1,h2{
             color:white;
             font-family: sans-serif;
@@ -93,7 +88,7 @@
             </div>
             <div id = "nav">
                 <button onclick = "location.href='{% url 'profile' profile_user.id %}'">Profile Page</button>
-                <button onclick = "location.href='{% url 'profile' profile_user.id %}'">Settings</button>
+                <button onclick = "location.href='{% url 'settings' profile_user.id %}'">Settings</button>
             </div>
         </div>
 
