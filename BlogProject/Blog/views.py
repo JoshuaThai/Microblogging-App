@@ -133,3 +133,145 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, 'profile.html', {'profile_user': user})
     def post(self, request):
         pass
+class SettingsView(LoginRequiredMixin, View):
+    def get(self, request, id):
+        print('id', id)
+        user = User.objects.filter(id=id).first()
+        return render(request, 'settings.html', {'profile_user': user})
+    def post(self, request, id):
+        action = request.POST.get('action')
+        print('action', action)
+        if action == 'changeFirst':
+            first_name = request.POST.get('first_name')
+            user = User.objects.filter(id=id).first()
+            if not first_name:
+                return render(request, 'settings.html',
+                              {'profile_user': user,
+                               'message': 'First name cannot be empty. Enter your new first name.'})
+            user.first_name = first_name
+            user.save()
+            user = User.objects.filter(id=id).first()
+            return render(request, 'settings.html', {
+                'profile_user': user,
+                'message': 'Successfully changed your first name.'
+            })
+
+        elif action == 'changeLast':
+            last_name = request.POST.get('last_name')
+            user = User.objects.filter(id=id).first()
+            if not last_name:
+                return render(request, 'settings.html',
+                              {'profile_user': user,
+                               'message': 'Last name cannot be empty. Enter your new last name.'})
+            user.last_name = last_name
+            user.save()
+            user = User.objects.filter(id=id).first()
+            return render(request, 'settings.html', {
+                'profile_user': user,
+                'message': 'Successfully changed your last name.'
+            })
+
+        elif action == 'changeEmail':
+            email = request.POST.get('email')
+            user = User.objects.filter(id=id).first()
+            if not email:
+                return render(request, 'settings.html',
+                              {'profile_user': user,
+                               'message': 'Email cannot be empty. Enter a valid email.'})
+            if '@' not in email:
+                return render(request, 'settings.html',{
+                    'profile_user': user,
+                    'message': 'Invalid email address. Enter a valid email address.'
+                })
+            find_email = User.objects.filter(email=email).exclude(id=user.id).first()
+            if find_email: # check if email is unique
+                return render(request, 'settings.html',
+                              {'profile_user': user,
+                               'message':'This email is already associated with another account. '
+                                         'Please enter a different email address.'})
+            user.email = email
+            user.save()
+
+            user = User.objects.filter(id=id).first()
+            return render(request, 'settings.html', {
+                'profile_user': user,
+                'message': 'Email successfully changed.'
+            })
+        elif action == 'changeUsername':
+            username = request.POST.get('username')
+            user = User.objects.filter(id=id).first()
+            if not username: # prevent users from entering an empty username
+                return render(request, 'settings.html',{
+                    'profile_user': user,
+                    'message': 'Username cannot be empty. Enter a valid new username.'
+                })
+            if len(username) < 5:
+                return render(request, 'settings.html',{
+                    'profile_user': user,
+                    'message': 'Username should be at least 5 characters. Enter a valid new username.'
+                })
+            user.username = username
+            user.save()
+
+            user = User.objects.filter(id=id).first()
+            return render(request, 'settings.html', {
+                'profile_user': user,
+                'message': 'Username successfully changed.'
+            })
+        elif action == 'changeDate':
+            birthDate = request.POST.get('birthDate')
+            user = User.objects.filter(id=id).first()
+            if not birthDate:
+                return render(request, 'settings.html',{
+                    'profile_user': user,
+                    'message': 'Date of birth cannot be empty. Please enter your date of birth.'
+                })
+            user.birthDate = birthDate
+            user.save()
+
+            user = User.objects.filter(id=id).first()
+            return render(request, 'settings.html', {
+                'profile_user': user,
+            'message': 'Date of birth successfully changed.'
+            })
+        elif action == 'changePass':
+            oldPassword = request.POST.get('oldPass')
+            newPassword = request.POST.get('newPass')
+            user = User.objects.filter(id=id).first()
+            if not oldPassword:
+                return render(request, 'settings.html',{
+                    'profile_user': user,
+                    'message': 'Old password cannot be empty. Please enter your old password.'
+                })
+            # check if the old password matches our records.
+            if not user.check_password(oldPassword):
+                return render(request, 'settings.html',{
+                    'profile_user': user,
+                    'message': 'The old password entered does not match our records. '
+                               'Please re-enter your old password.'
+                })
+
+            if not newPassword:
+                return render(request, 'settings.html', {
+                    'profile_user': user,
+                    'message': 'New password cannot be blank. Please enter a valid new password.'
+                })
+            if len(newPassword) > 24:
+                return render(request, 'settings.html',{
+                    'profile_user': user,
+                    'message': 'Password too long! Please enter a new password that is at most 24 characters.'
+                })
+            if len(newPassword) < 8:
+                return render(request, 'settings.html',{
+                    'profile_user': user,
+                    'message': 'Password too short! Please enter a new password that is at least 8 characters.'
+                })
+
+            # If valid, update the password
+            user.set_password(newPassword)
+            user.save()
+            user = User.objects.filter(id=id).first()
+            return render(request, 'settings.html', {
+                'profile_user': user,
+                'message': 'Password successfully changed.'
+            })

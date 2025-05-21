@@ -67,7 +67,7 @@
          </div>
         <div id ="box">
                 <h1 style="font-size: 48px"><u>Settings:</u></h1>
-                <p>{{ message }}</p>
+                <p style="color: red; font-size: 32px; font-weight: bold">{{ message }}</p>
     {#            <label for="first_name">First Name</label><br>#}
     {#                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">#}
                 <div id = "info">
@@ -81,34 +81,46 @@
                     <input class="submit" type="submit" value="Submit New First Name">
                         </form>
                     <hr>
-                    <form method="post">
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
                         {% csrf_token %}
                     <label for="last_name">Last Name</label><br><br>
+                        <input type="hidden" name="action" value="changeLast">
                     <input type="text" id="last_name" name="last_name" value="{{ profile_user.last_name }}"><br><br>
                     <input class="submit" type="submit" value="Submit New Last Name">
                     </form>
                     <hr>
-                    <form method="post">
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
                         {% csrf_token %}
                      <label for="email">Email</label><br><br>
+                        <input type="hidden" name="action" value="changeEmail">
                     <input type="email" id="email" name="email" value="{{ profile_user.email }}"><br><br>
                     <input class="submit" type="submit" value="Submit New Email Address">
                     </form>
                     <hr>
-                    <form method="post">
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
                         {% csrf_token %}
                      <label for="username">Username</label><br><br>
+                    <input type="hidden" name="action" value="changeUsername">
                     <input type="text" id="username" name="username" value="{{ profile_user.username }}"><br><br>
                     <input class="submit" type="submit" value="Submit New Username">
                     </form>
                     <hr>
-                    <form method="post">
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
+                        {% csrf_token %}
+                     <label for="birthDate">Date of Birth</label><br><br>
+                    <input type="hidden" name="action" value="changeDate">
+                    <input type="date" id="birthDate" name="birthDate" value="{{ profile_user.birthDate|date:'Y-m-d' }}"><br><br>
+                    <input class="submit" type="submit" value="Submit New Date">
+                    </form>
+                    <hr>
+                    <form method="post" action="{% url 'settings' profile_user.id %}">
                         {% csrf_token %}
                      <label for="password">Password</label><br><br>
                     <label for="oldPass">Enter Old Password</label><br><br>
                     <input type="password" id="oldPass" name="oldPass"><br><br>
                     <label for="newPass">Enter New Password</label><br><br>
                     <input type="password" id="newPass" name="newPass"><br><br>
+                        <input type="hidden" name="action" value="changePass">
                     <input class="submit" type="submit" value="Submit New Password">
                     </form>
                     <hr>
