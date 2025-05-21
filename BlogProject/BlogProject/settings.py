@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'Blog.User'
 LOGIN_URL = '/login/'
+USE_TZ = True  # Enables time zone support
+TIME_ZONE = 'America/Chicago'  # or your local timezone
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.tz',
             ],
         },
     },

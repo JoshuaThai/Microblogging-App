@@ -1,3 +1,4 @@
+{% load tz %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +8,7 @@
     <link href= "{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
     <link rel = icon type="image/x-icon" href = {% static 'images/favicon.ico' %}>
     <style>
-        h1,h2{
+        h1,h2,h3{
             color:white;
             font-family: sans-serif;
         }
@@ -72,6 +73,8 @@
                 width="150" height ="150">
                 </button>
                 <h2>{{ profile_user.username }}</h2>
+                <hr>
+                <h3>Date Joined: {{ profile_user.accountCreated|date:"F j, Y" }}</h3>
                 <hr>
                 <label for="bio" style="font-family: sans-serif"><b><u>Biography:</u></b></label><br>
                 <p class = "userPosts">
