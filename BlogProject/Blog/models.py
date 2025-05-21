@@ -5,8 +5,10 @@ from django.db import models
 
 class User(AbstractUser):
     birthDate = models.DateField(auto_now= False, auto_now_add=False, null=True, blank=True)
-    accountCreated = models.DateTimeField(auto_now_add=True) # set the time to now when object is first created.
-
+    # set the time to now when object is first created.
+    accountCreated = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    # a biography of the user
+    bio = models.TextField(null=True, blank=True, max_length=300)
     ROLE_CHOICES = (
         ('user', 'User'),
         ('admin', 'Admin'),
