@@ -1,3 +1,4 @@
+{% load tz %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -7,19 +8,20 @@
     <link href= "{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
     <link rel = icon type="image/x-icon" href = {% static 'images/favicon.ico' %}>
     <style>
-        h1,h2{
+        h1,h2,h3{
             color:white;
             font-family: sans-serif;
         }
 
         .bg {
             {#position: absolute;#}
-            height: 100%;
-            width: 100%;
+            {#height: 100%;#}
+            {#width: 100%;#}
             background-image: url("{% static 'images/moonlight.jpg' %}");
             background-position: center;
-            background-repeat: repeat;
-            background-size: cover;
+            background-repeat: repeat-y;
+            background-size: auto;
+            min-height: 100vh;
         }
 
         .logo{
@@ -50,10 +52,53 @@
             padding: 1%;
             background-color: rgb(49,49,104);
         }
+        #bioBox{
+            background-color: rgb(49,49,104);
+            position: absolute;
+            {#display: flex;#}
+            {#justify-content: center;#}
+            justify-content: center; /* vertical center */
+            align-items: center;     /* horizontal center */
+            width: 50%;
+            height: 50%;
+            left: 25%;
+            top: 25%;
+            z-index: 1;
+            border: 10px solid black;
+            text-align: center;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            {#height: 50%;#}
+        }
+        #bio{
+            width: 150%;
+        }
+        #bioButton{
+            align-content: center;
+        }
         </style>
 </head>
 <body>
     <div class="bg">
+        {# The popup window that appears when user want to edit their bio #}
+        <div id="bioBox" style="display: none">
+            <div class="bioContent">
+                <form method="post" action="{% url 'profile' profile_user.id %}">
+                    {% csrf_token %}
+                    <label for="bio">Biography</label><br><br>
+{#                            <input type="hidden" id="user_id" name="user_id" value="{{ profile_user.id }}">#}
+                     <textarea id="bio" name="bio" placeholder="Describe yourself ;)"
+                               style = "resize: none; width: 200%;" maxlength="200">
+
+                     </textarea><br><br>
+                    <input type="submit" value="Submit Biography"><br><br>
+                </form>
+            <button id ="bioButton" onclick="showBox()">Close</button>
+            </div>
+        </div>
         <div class = "header">
             <div class = "logo">
                 <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="150" height="150">
@@ -73,26 +118,26 @@
                 </button>
                 <h2>{{ profile_user.username }}</h2>
                 <hr>
+                <h3>Date Joined: {{ profile_user.accountCreated|date:"F j, Y" }}</h3>
+                <hr>
                 <label for="bio" style="font-family: sans-serif"><b><u>Biography:</u></b></label><br>
-                <p class = "userPosts">
-                    What the skibidi?</p>
-                <button style ="border-radius: 10px; background-color: #6352bf;"
-                        onclick = "location.href='{% url 'profile' profile_user.id %}'">
+                {% if profile_user.bio %}
+                    <p class = "userPosts">{{ profile_user.bio}}</p>
+                {% else %}
+                    <p class = "userPosts"> Add a bio.</p>
+                {% endif %}
+                <button style ="border-radius: 10px; background-color: #6352bf;" onclick = "showBox()">
                     Edit</button>
-{#                <form method="post">#}
-{#                    {% csrf_token %}#}
-{#                    <label for="bio">Biography</label><br><br>#}
-{#                    <input type="text" id="bio" name="bio" placeholder="Describe yourself ;)"><br><br>#}
-{#                    <input type="submit" value="Submit Biography"><br><br>#}
-{#                </form>#}
             </div>
             <div id = "nav">
                 <button onclick = "location.href='{% url 'profile' profile_user.id %}'">Profile Page</button>
                 <button onclick = "location.href='{% url 'settings' profile_user.id %}'">Settings</button>
             </div>
+            <br><br>
         </div>
-
+        <br><br>
     </div>
 
+    <script src="{% static 'js/style.js' %}"></script>
 </body>
 </html>

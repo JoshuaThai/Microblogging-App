@@ -71,8 +71,8 @@ button:hover{
 
 .box{
   background: rgba(49, 49, 104, 0.8);
-  width: 400px;
-  height: 650px;
+  width: 40%;
+  height: auto;
   border-radius: 25px;
   align-content: center;
   text-align: center;
@@ -120,3 +120,10 @@ label{
   font-size: 20px;
   color: white
 }
+
+a:visited{color:red;}
+
+a{color:white;}
+
+a:hover{color:black}
+

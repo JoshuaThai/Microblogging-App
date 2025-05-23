@@ -19,8 +19,8 @@
 
         #box{
           background: rgba(49, 49, 104, 0.8);
-          width: 400px;
-          height: 400px;
+          width: 30%;
+          height: auto;
           border-radius: 25px;
           align-content: center;
           text-align: center;
@@ -62,7 +62,9 @@
                 <br><br>
                  <label for="password"><b>Password:</b></label><br>
                  <input type = "password" id = "password" name="password" placeholder= "Enter Password"><br><br>
-                 <input class ="submit" type="submit" value="Log In">
+                 <input class ="submit" type="submit" value="Log In"><br>
+                <p style="font-size:24px; color: white ">No account?
+                    <a href="{% url 'signUp' %}">Sign Up Here!</a></p>
             </form>
         </div>
     </div>
