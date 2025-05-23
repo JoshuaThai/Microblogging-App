@@ -74,7 +74,8 @@
             {#height: 50%;#}
         }
         #bio{
-            width: 150%;
+            width: 100%;
+            max-width: 600px;
         }
         #bioButton{
             align-content: center;
@@ -90,10 +91,10 @@
                     {% csrf_token %}
                     <label for="bio">Biography</label><br><br>
 {#                            <input type="hidden" id="user_id" name="user_id" value="{{ profile_user.id }}">#}
-                     <textarea id="bio" name="bio" placeholder="Describe yourself ;)"
-                               style = "resize: none; width: 200%;" maxlength="200">
+                     <textarea id="bio" name="bio" style = "resize: none; width: 200%;"
+                               maxlength="200">
 
-                     </textarea><br><br>
+                     </textarea><br>
                     <input type="submit" value="Submit Biography"><br><br>
                 </form>
             <button id ="bioButton" onclick="showBox()">Close</button>
@@ -126,7 +127,8 @@
                 {% else %}
                     <p class = "userPosts"> Add a bio.</p>
                 {% endif %}
-                <button style ="border-radius: 10px; background-color: #6352bf;" onclick = "showBox()">
+                <button style ="border-radius: 10px; background-color: #6352bf;"
+                        onclick = "showBox(); setBio()">
                     Edit</button>
             </div>
             <div id = "nav">
@@ -138,6 +140,12 @@
         <br><br>
     </div>
 
+    <script>
+       document.addEventListener("DOMContentLoaded", function() {
+        const bioText = "{{ profile_user.bio|escapejs }}";
+        document.getElementById("bio").value = bioText;
+    });
+    </script>
     <script src="{% static 'js/style.js' %}"></script>
 </body>
 </html>
