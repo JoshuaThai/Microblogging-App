@@ -131,8 +131,13 @@ class ProfileView(LoginRequiredMixin, View):
         print('id', id)
         user = User.objects.filter(id=id).first()
         return render(request, 'profile.html', {'profile_user': user})
-    def post(self, request):
-        pass
+    def post(self, request, id):
+        biography = request.POST.get('bio')
+        user = User.objects.filter(id=id).first()
+        user.bio = biography
+        user.save()
+        user = User.objects.filter(id=id).first()
+        return render(request, 'profile.html', {'profile_user': user})
 class SettingsView(LoginRequiredMixin, View):
     def get(self, request, id):
         print('id', id)

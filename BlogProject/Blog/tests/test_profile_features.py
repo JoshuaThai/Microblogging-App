@@ -21,8 +21,7 @@ class AddBioTests(TestCase):
         print("Login success?", login_successful)
 
     def test_add_bio(self):
-        response = self.client.post(reverse('settings', args=[self.user.id]),{
-            'user_id': self.user.id,
+        response = self.client.post(reverse('profile', args=[self.user.id]),{
             'bio': 'Hi there!'
         })
 
