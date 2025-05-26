@@ -35,7 +35,8 @@
 </head>
 <body>
     <div class = "bg">
-        <div class = "header">
+{#        <div class = "header">#}
+        <header>
             <div class = "logo">
                 <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="150" height="150">
             </div>
@@ -53,7 +54,8 @@
                         </form>
                 </div>
             {% endif %}
-        </div>
+        </header>
+{#        </div>#}
         {% if username %}
                 <div style="text-align: center;">
                     <h2 id="welcome">

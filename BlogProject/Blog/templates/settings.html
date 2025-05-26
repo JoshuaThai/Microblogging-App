@@ -57,14 +57,14 @@
 <body>
 {# Each account information will have its own submit button. Make sure to adjust view.py for this exact reason.#}
  <div class="bg">
-        <div class = "header">
+        <header>
             <div class = "logo">
                 <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="150" height="150">
             </div>
              <div class = "signIn">
                  <button class = "signUp" onclick = "location.href='{% url 'profile' profile_user.id%}'">Back to Profile</button>
              </div>
-         </div>
+        </header>
         <div id ="box">
                 <h1 style="font-size: 48px"><u>Settings:</u></h1>
                 <p style="color: red; font-size: 32px; font-weight: bold">{{ message }}</p>
