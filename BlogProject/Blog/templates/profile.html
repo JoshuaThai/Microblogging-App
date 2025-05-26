@@ -21,68 +21,131 @@
             min-height: 100vh;
         }
 
-        .logo{
-            display: inline-block;
+        header{
+            display: flex;
+            flex-direction: row;
+            flex: 1 1 auto;
+        }
+
+        .logo img{
+            border: 4px solid white;
         }
 
         .signIn{
-            display: inline-block;
-            margin-top: -100px;
+            margin-top: -109px;
         }
-
         #profile{
             display: flex;
-            background-color: rgba(63, 63, 140, 0.8);
+            flex: 1 1 auto;
             justify-content: center;
-            padding-top: 1%;
-            margin-left: 10%;
-            margin-right: 10%;
-            margin-bottom: auto;
-            border: 2px solid black;
-
+            align-items: center;
+            background-color: rgba(63, 63, 140, 0.8);
+            max-width:50vw;
+            min-height: 50vh;
+            transform: translate(50%, 0%);
+            border: 2px solid white;
         }
-        #nav{
-            position: absolute;
-            margin-left: 72.5%;
-            border: 2px solid black;
-            border-radius: 10px;
-            padding: 1%;
-            background-color: rgb(49,49,104);
+        #profileInfo {
+            display: grid;
+            grid-template-areas:
+            "top top"
+            "user_bio postSection";
+            grid-template-columns: 1fr 3fr;
         }
-        #profileInfo{
-            margin-right: 80%; text-align: center;
+        {#Assigning the grid area#}
+        #profileInfo > #top{
+            grid-area: top;
         }
-        #bioBox{
-            background-color: rgb(49,49,104);
-            position: absolute;
-            {#display: flex;#}
-            {#justify-content: center;#}
-            justify-content: center; /* vertical center */
-            align-items: center;     /* horizontal center */
-            width: 50%;
+        #top{
+            display: flex;
+            flex: 1 1 auto;
+            justify-content: space-between;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            background-color: rgba(255,255,255,0.5);
+        }
+        #settings{
+            background-color: rgba(63, 63, 140, 0.8);
+            border-radius: 2000px;
+            width: 12.5%;
             height: 50%;
-            left: 25%;
-            top: 25%;
-            z-index: 1;
-            border: 10px solid black;
+            transform: translateX(-10%);
+        }
+        #profilePic{
+            background-color: rgba(63, 63, 140, 0.8);
+        }
+        #profileInfo > #user_bio{
+            grid-area: user_bio;
+        }
+
+        #user_bio{
             text-align: center;
         }
-        form{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            {#height: 50%;#}
-        }
-        #bio{
-            width: 100%;
-            max-width: 600px;
-        }
-        #bioButton{
-            align-content: center;
+
+        #profileInfo > #postSection{
+            grid-area: postSection;
         }
         #postSection{
-            position:absolute;
+            display: grid;
+            grid-template-areas:
+            "createPost"
+            "posts";
+            grid-template-columns: 0.5fr;
+            justify-content: center;
+            {#border: 2px solid black;#}
         }
+
+        #postSection > #createPost{
+            grid-area: createPost;
+        }
+        #createPost{
+            display: flex;
+            flex-direction: column;
+        }
+        #createPost form{
+            display: flex;
+            flex-direction: column;
+        }
+
+        #postSection > .posts{
+            grid-area: posts;
+        }
+        .userPosts{
+            display: flex;
+            flex-direction: column;
+        }
+        {# Where the user's posts are listed out#}
+        .posts{
+            display: flex;
+            flex-direction: column;
+            max-width: 150%;
+            transform: translateX(-15%);
+        }
+        {##create:hover{#}
+        {#    cursor: pointer;#}
+        {#    opacity: 50%;#}
+        {##}
+        {##bioBox{#}
+        {#    background-color: rgb(49,49,104);#}
+        {#    position: absolute;#}
+            {#display: flex;#}
+            {#justify-content: center;#}
+        {#    justify-content: center; /* vertical center */#}
+        {#    align-items: center;     /* horizontal center */#}
+        {#    width: 50%;#}
+        {#    height: 50%;#}
+        {#    left: 25%;#}
+        {#    top: 25%;#}
+        {#    z-index: 1;#}
+        {#    border: 10px solid black;#}
+        {#    text-align: center;#}
+        {##}
+        {#form{#}
+        {#    display: flex;#}
+        {#    flex-direction: column;#}
+        {#    align-items: center;#}
+            {#height: 50%;#}
+        {##}
         </style>
 </head>
 <body>
@@ -94,15 +157,15 @@
                     {% csrf_token %}
                     <label for="bio">Biography</label><br><br>
 {#                            <input type="hidden" id="user_id" name="user_id" value="{{ profile_user.id }}">#}
-                     <textarea id="bio" name="bio" style = "resize: none; width: 200%;"
-                               maxlength="200">
-
-                     </textarea><br>
+                    <input type="hidden" name="action" value="editBio">
+                     <textarea id="bio" name="bio" style = "resize: block; width: 200%; max-height: 150%"
+                               maxlength="200"></textarea><br>
                     <input type="submit" value="Submit Biography"><br><br>
                 </form>
             <button id ="bioButton" onclick="showBox()">Close</button>
             </div>
         </div>
+
         <header>
             <div class = "logo">
                 <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="150" height="150">
@@ -111,45 +174,69 @@
                  <button class = "signUp" onclick = "location.href='{% url 'home' %}'">Back to Home</button>
              </div>
          </header>
+
         <div id = "profile">
-{#            margin-right: 400px;#}
-            <aside id = "profileInfo">
-{#                <h2>{{ profile_user.username }}!</h2>#}
-                <button onclick="alert('Clicked to view profile picture!')">
-                    <img src="{% static 'images/placeholder_avatar.png' %}"
-                     alt = "{{ profile_user.username }}'s profile picture"
-                width="150" height ="150">
-                </button>
-                <h2>{{ profile_user.username }}</h2>
-                <hr>
-                <h3>Date Joined: {{ profile_user.accountCreated|date:"F j, Y" }}</h3>
-                <hr>
-                <label for="bio" style="font-family: sans-serif"><b><u>Biography:</u></b></label><br>
-                {% if profile_user.bio %}
-                    <p class = "userPosts">{{ profile_user.bio}}</p>
-                {% else %}
-                    <p class = "userPosts"> Add a bio.</p>
-                {% endif %}
-                <button style ="border-radius: 10px; background-color: #6352bf;"
-                        onclick = "showBox();">
-                    Edit</button>
-            </aside>
-            <main id="postSection">
-                <h1 style="font-size: 48px; text-decoration: underline">{{ profile_user.username}}'s posts</h1>
-                <div class="posts">
-                    
+            <div id="profileInfo">
+                {#            margin-right: 400px;#}
+                <div id="top">
+                    <button id="profilePic" onclick="alert('Clicked to view profile picture!')">
+                        <img src="{% static 'images/placeholder_avatar.png' %}"
+                         alt = "{{ profile_user.username }}'s profile picture"
+                    width="150" height ="150">
+                    </button>
+                    <button id="settings" onclick = "location.href='{% url 'settings' profile_user.id %}'">
+                        ⚙️</button>
                 </div>
-            </main>
-{#        Aside above#}
-            <aside id="nav">
-                <button onclick = "location.href='{% url 'settings' profile_user.id %}'">⚙️</button>
-            </aside>
-            <br><br>
+                <div id = "user_bio">
+    {#                <h2>{{ profile_user.username }}!</h2>#}
+                    <h2>{{ profile_user.username }}</h2>
+                    <hr>
+                    <h3>Date Joined: {{ profile_user.accountCreated|date:"F j, Y" }}</h3>
+                    <hr>
+                    <label for="bio" style="font-family: sans-serif"><b><u>Biography:</u></b></label><br>
+                    {% if profile_user.bio %}
+                        <p class = "userBio">{{ profile_user.bio}}</p>
+                    {% else %}
+                        <p class = "userBio"> Add a bio.</p>
+                    {% endif %}
+                    <button style ="border-radius: 10px; background-color: #6352bf;"
+                            onclick = "showBox();">
+                        Edit</button>
+                </div>
+
+                <main id="postSection">
+                    <div id="createPost">
+                        <h1 style="font-size: 36px; text-decoration: underline">
+                            {{ profile_user.username}}'s posts</h1>
+                    {% if profile_user.id == viewerId %}
+                        <form method="post" action="{% url 'profile' profile_user.id %}">
+                        {% csrf_token %}
+                            <input type="hidden" name="action" value="addPost">
+                            <label for="post">Create a new Post!</label>
+                            <textarea id="post" name="post" style = "resize: none; width: 100%;"
+                                      maxlength="200" placeholder="Say something to world!"></textarea><br>
+                        <input id="create" type="submit" value="Post"><br><br>
+                        </form>
+                    {% endif %}
+                    </div>
+                    <div class="posts">
+                        {% for post in userPosts %}
+                            <div class="userPosts">
+                                <p>{{ post.text }}</p>
+                                <p>Post created: {{ post.created }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </main>
+            </div>
         </div>
         <br><br>
     </div>
 
     <script>
+        {#function hoverEffect(){#}
+        {#    document.getElementById("create").style.opacity = 0.5;#}
+        {##}
        document.addEventListener("DOMContentLoaded", function() {
         const bioText = "{{ profile_user.bio|escapejs }}";
         document.getElementById("bio").value = bioText;

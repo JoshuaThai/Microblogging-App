@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 
-from .models import User
+from .models import User, Post
 
 
 # Create your views here.
@@ -130,14 +130,26 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request, id):
         print('id', id)
         user = User.objects.filter(id=id).first()
-        return render(request, 'profile.html', {'profile_user': user})
+        posts = Post.objects.filter(author=user).all()
+        return render(request, 'profile.html', {
+            'profile_user': user,
+            'viewerId': id,
+            'userPosts': posts})
     def post(self, request, id):
-        biography = request.POST.get('bio')
+        action = request.POST.get('action')
+        if action == 'editBio':
+            biography = request.POST.get('bio')
+            user = User.objects.filter(id=id).first()
+            user.bio = biography
+            user.save()
+            user = User.objects.filter(id=id).first()
+            # return render(request, 'profile.html', {'profile_user': user, 'viewerId': id})
+            return redirect('profile', id)
+        post = request.POST.get('post')
         user = User.objects.filter(id=id).first()
-        user.bio = biography
-        user.save()
-        user = User.objects.filter(id=id).first()
-        return render(request, 'profile.html', {'profile_user': user})
+        new_post = Post.objects.create(author=user, text=post)
+        new_post.save()
+        return redirect('profile', id)
 class SettingsView(LoginRequiredMixin, View):
     def get(self, request, id):
         print('id', id)
