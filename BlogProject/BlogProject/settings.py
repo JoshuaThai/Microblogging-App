@@ -42,8 +42,6 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'Blog.User'
 LOGIN_URL = '/login/'
-USE_TZ = True  # Enables time zone support
-TIME_ZONE = 'America/Chicago'  # or your local timezone
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -112,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Chicago'  # or your local timezone
 
 USE_I18N = True
 
