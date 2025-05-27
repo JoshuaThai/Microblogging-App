@@ -125,12 +125,11 @@ label{
   text-align: center;
 }
 
-.posts{
-  /*max-width: 700px;*/
-  border: 2px solid black;
-  width: 200%;
-    transform: translateX(-50%);
-}
+/*.posts{*/
+/*  !*max-width: 700px;*!*/
+/*  !*border: 2px solid black;*!*/
+/*  width: 200%;*/
+/*}*/
 
 .userPosts{
   background-color: rgba(92,146,214,0.1);

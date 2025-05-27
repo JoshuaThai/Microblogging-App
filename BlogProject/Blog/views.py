@@ -130,7 +130,7 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request, id):
         print('id', id)
         user = User.objects.filter(id=id).first()
-        posts = Post.objects.filter(author=user).all()
+        posts = Post.objects.filter(author=user).all().order_by('-created') # order the posts by most recent.
         return render(request, 'profile.html', {
             'profile_user': user,
             'viewerId': id,
