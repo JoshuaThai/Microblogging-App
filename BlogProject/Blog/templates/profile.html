@@ -107,6 +107,7 @@
         #createPost{
             display: flex;
             flex-direction: column;
+            text-align: center;
         }
         #createPost form{
             display: flex;
@@ -129,6 +130,7 @@
         }
         .userPosts{
             background-color: rgb(32, 32, 69);
+            box-shadow: 1px 1px 10px rgb(0,0,0);
         }
         </style>
 </head>
@@ -190,6 +192,7 @@
 
                 <main id="postSection">
                     <div id="createPost">
+                    <p class="invalidMessage">{{ message }}</p>
                         <h1 style="font-size: 36px; text-decoration: underline">
                             {{ profile_user.username}}'s posts</h1>
                     {% if profile_user.id == viewerId %}

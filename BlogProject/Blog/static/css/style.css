@@ -5,6 +5,13 @@ body, html {
     height: 100%;
 }
 
+.invalidMessage{
+  font-weight: bold;
+  background-color: white;
+  font-size: 24px;
+  color: red;
+}
+
 .content{
   text-align: center;
 }

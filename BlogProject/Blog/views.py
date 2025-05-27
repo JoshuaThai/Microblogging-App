@@ -143,10 +143,17 @@ class ProfileView(LoginRequiredMixin, View):
             user.bio = biography
             user.save()
             user = User.objects.filter(id=id).first()
-            # return render(request, 'profile.html', {'profile_user': user, 'viewerId': id})
             return redirect('profile', id)
         post = request.POST.get('post')
         user = User.objects.filter(id=id).first()
+        if post.strip() == '':
+            posts = Post.objects.filter(author=user).all().order_by('-created')  # order the posts by most recent.
+            return render(request, 'profile.html', {
+                'message': 'Post cannot be empty!',
+                'profile_user': user,
+                'viewerId': id,
+                'userPosts': posts
+                })
         new_post = Post.objects.create(author=user, text=post)
         new_post.save()
         return redirect('profile', id)

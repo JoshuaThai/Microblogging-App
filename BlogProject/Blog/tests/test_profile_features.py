@@ -54,3 +54,13 @@ class CreatePostTests(TestCase):
         # page should be reloaded
         # self.assertEqual(response.status_code, 302)
         self.assertContains(response, 'Hello there!')
+
+    def test_add_empty_post(self):
+        response = self.client.post(reverse('profile', args=[self.user.id]),{
+            'action': 'createPost',
+            'post': ''
+        }, follow=True)
+
+        post = Post.objects.filter(author=self.user, text='').first()
+        self.assertFalse(post) # check if post was created, it shouldn't have been
+        self.assertContains(response, 'Post cannot be empty!')
