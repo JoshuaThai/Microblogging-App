@@ -90,6 +90,12 @@ class DeletePostTests(TestCase):
         post = Post.objects.filter(author=self.user, text='').first()
         self.assertFalse(post)
         self.assertContains(response, 'Hello there!')
+    def test_unsuccessful_delete_post(self):
+        response = self.client.post(reverse('profile', args=[self.user.id]),{
+            'action': 'deletePost',
+            'post_id': '3'
+        }, follow=True)
+        self.assertContains(response, 'Deletion unsuccessful! Post not found.')
 
     def test_delete_post(self):
         response = self.client.post(reverse('profile', args=[self.user.id]),{
