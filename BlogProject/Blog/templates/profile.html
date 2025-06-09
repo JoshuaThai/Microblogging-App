@@ -19,12 +19,24 @@
             background-repeat: no-repeat;
             background-size: cover;
             min-height: 100vh;
+            {#overflow-y: auto;#}
         }
 
         header{
+            background-color: rgba(63, 63, 140, 0.8);
+            height:14vh;
             display: flex;
             flex-direction: row;
             flex: 1 1 auto;
+        }
+        .logo{
+            display: flex;
+            justify-content: space-between;
+            {#border: 2px solid black;#}
+            align-items: center;
+            width: 25%;
+            margin-top: -1%;
+            {#justify-items: center;#}
         }
 
         .logo img{
@@ -32,16 +44,17 @@
         }
 
         .signIn{
-            margin-top: -109px;
+            margin-top: -2.5%;
         }
         #profile{
             display: flex;
+            max-width:50vw;
+            min-height: 50vh;
+            overflow: auto;
             flex: 1 1 auto;
             justify-content: center;
             align-items: center;
             background-color: rgba(63, 63, 140, 0.8);
-            max-width:50vw;
-            min-height: 50vh;
             transform: translate(50%, 0%);
             border: 2px solid white;
             border-radius: 10px;
@@ -117,10 +130,6 @@
         #postSection > .posts{
             grid-area: posts;
         }
-        .userPosts{
-            display: flex;
-            flex-direction: column;
-        }
         {# Where the user's posts are listed out#}
         .posts{
             display: flex;
@@ -129,8 +138,39 @@
             transform: translateX(-15%);
         }
         .userPosts{
+            display: flex;
+            flex-direction: column;
+            min-height: 15%;
+            height: auto;
             background-color: rgb(32, 32, 69);
             box-shadow: 1px 1px 10px rgb(0,0,0);
+        }
+
+        .userPosts form{
+            height: auto;
+            margin-bottom: 3%;
+        }
+        #bioBox{
+            position: fixed;
+            z-index: 1;
+            background-color: rgba(63, 63, 140, 1);
+            border: 2px solid black;
+            width: 50%;
+            min-height: 50%;
+            transform: translate(26vw, 25vh);
+        }
+        .bioContent{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transform: translateX(200%);
+            {#align-items: center;#}
+            text-align: center;
+        }
+        .bioContent form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         </style>
 </head>
@@ -154,12 +194,14 @@
 
         <header>
             <div class = "logo">
-                <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="150" height="150">
+                    <img src = "{% static 'images/Logo.png' %}" alt= "Night Owl logo" width="100" height="100">
+                    <p style="color: white; font-size: 300%; margin-right: 20%;">Night Owl</p>
             </div>
              <div class = "signIn">
                  <button class = "signUp" onclick = "location.href='{% url 'home' %}'">Back to Home</button>
              </div>
          </header>
+    <br>
 
         <div id = "profile">
             <div id="profileInfo">
@@ -211,6 +253,12 @@
                             <div class="userPosts">
                                 <p>{{ post.text }}</p>
                                 <p>Post created: {{ post.created }}</p>
+                            <form method="post" action="{% url 'profile' profile_user.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="deletePost">
+                                <input type="hidden" name="postID" value="{{ post.id }}">
+                                <input type="submit" value="Delete Post">
+                            </form>
                             </div>
                             <br>
                         {% endfor %}
