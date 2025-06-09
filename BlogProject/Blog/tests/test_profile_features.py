@@ -64,3 +64,41 @@ class CreatePostTests(TestCase):
         post = Post.objects.filter(author=self.user, text='').first()
         self.assertFalse(post) # check if post was created, it shouldn't have been
         self.assertContains(response, 'Post cannot be empty!')
+
+class DeletePostTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            first_name='John',
+            last_name='Doe',
+            username ='testuser',
+            password='password',
+            email='email@gmail.com',
+            birthDate=datetime.date(1970, 1, 1),
+            role='user'
+        )
+        self.user.set_password('password')
+        self.user.save()
+        login_successful = self.client.login(username='testuser', password='password')
+        print("Login success?", login_successful)
+
+    def test_create_post(self):
+        response = self.client.post(reverse('profile', args=[self.user.id]),{
+            'action': 'createPost',
+            'post' : 'Hello there!'
+        }, follow=True)
+        post = Post.objects.filter(author=self.user, text='').first()
+        self.assertFalse(post)
+        self.assertContains(response, 'Hello there!')
+
+    def test_delete_post(self):
+        response = self.client.post(reverse('profile', args=[self.user.id]),{
+            'action': 'deletePost',
+            'post_id': '1'
+        }, follow=True)
+
+        post = Post.objects.filter(author=self.user, id=1).first()
+        self.assertFalse(post) # post should no longer exist
+        self.assertNotContains(response, 'Post cannot be empty!')
+
+
