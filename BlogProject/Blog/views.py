@@ -144,6 +144,20 @@ class ProfileView(LoginRequiredMixin, View):
             user.save()
             user = User.objects.filter(id=id).first()
             return redirect('profile', id)
+        if action == 'deletePost':
+            postID = request.POST.get('postID')
+            post = Post.objects.filter(id=postID).first()
+            if not post:
+                user = User.objects.filter(id=id).first()
+                posts = Post.objects.filter(author=user).all().order_by('-created')  # order the posts by most recent.
+                return render(request, 'profile.html', {
+                    'message': 'Deletion unsuccessful! Post not found.',
+                    'profile_user': user,
+                    'viewerId': id,
+                    'userPosts': posts
+                })
+            post.delete()
+            return redirect('profile', id)
         post = request.POST.get('post')
         user = User.objects.filter(id=id).first()
         if post.strip() == '':
